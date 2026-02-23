@@ -1,7 +1,7 @@
 # JPEG Compression Analyzer
 An end-to-end implementation of the JPEG image compression pipeline from scratch in Python to analyze the trade-offs between image quality, file size, and reconstruction error.
 
-![Main Interface Placeholder]([Screenshoots\app.png](https://github.com/kobylev/L33-JPEG-Compression-Analyzer/blob/master/Screenshoots/app.png))
+![Main Interface Placeholder](https://github.com/kobylev/L33-JPEG-Compression-Analyzer/blob/master/Screenshoots/app.png)
 
 ## Project Structure
 The project is organized into a modular architecture where core logbic is separated from the web-facing components. Each Python file is kept under the 150-line limit to ensure maintainability and readability.
