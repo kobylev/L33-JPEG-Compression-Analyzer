@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JPEG Compression Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>JPEG Compression Analyzer</h1>
+        
+        <div class="upload-section" onclick="document.getElementById('fileInput').click()">
+            <p>Drag & Drop or Click to Upload Image (PNG/JPG)</p>
+            <input type="file" id="fileInput" hidden accept="image/*">
+            <div id="loading">Processing 10 Quality Levels... Please wait.</div>
+        </div>
+
+        <div class="results-section" id="resultsSection">
+            <div class="controls">
+                <label>Compression Quality: <span id="qualityVal">100</span>%</label>
+                <input type="range" id="qualitySlider" min="10" max="100" step="10" value="100">
+            </div>
+
+            <div class="display-panel">
+                <div class="image-container">
+                    <h3>Original</h3>
+                    <img id="originalImg" src="" alt="Original">
+                    <p id="originalInfo"></p>
+                </div>
+                <div class="image-container">
+                    <h3>Compressed</h3>
+                    <img id="compressedImg" src="" alt="Compressed">
+                    <p id="compressedInfo"></p>
+                </div>
+            </div>
+
+            <h3>Comparison Table</h3>
+            <table id="summaryTable">
+                <thead>
+                    <tr>
+                        <th>Quality %</th>
+                        <th>File Size (KB)</th>
+                        <th>% of Original</th>
+                        <th>MSE</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const qualitySlider = document.getElementById('qualitySlider');
+        let currentResults = null;
+
+        fileInput.addEventListener('change', async (e) => {
+            if (!e.target.files.length) return;
+            
+            const formData = new FormData();
+            formData.append('file', e.target.files[0]);
+            
+            document.getElementById('loading').style.display = 'block';
+            
+            try {
+                const response = await fetch('/upload', { method: 'POST', body: formData });
+                const data = await response.json();
+                
+                currentResults = data;
+                displayResults(data);
+            } catch (err) {
+                alert('Error processing image');
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        });
+
+        function displayResults(data) {
+            document.getElementById('resultsSection').style.display = 'block';
+            document.getElementById('originalImg').src = `/image/original/${data.original_filename}`;
+            document.getElementById('originalInfo').innerText = `${data.original_size_kb} KB`;
+            
+            const tbody = document.querySelector('#summaryTable tbody');
+            tbody.innerHTML = '';
+            
+            data.results.forEach(res => {
+                const row = `<tr>
+                    <td>${res.quality}%</td>
+                    <td>${res.file_size_kb}</td>
+                    <td>${res.size_percent}%</td>
+                    <td>${res.mse}</td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
+
+            updateCompressedView(100);
+            qualitySlider.value = 100;
+        }
+
+        qualitySlider.addEventListener('input', (e) => {
+            const q = e.target.value;
+            document.getElementById('qualityVal').innerText = q;
+            updateCompressedView(q);
+        });
+
+        function updateCompressedView(q) {
+            if (!currentResults) return;
+            const res = currentResults.results.find(r => r.quality == q);
+            if (res) {
+                document.getElementById('compressedImg').src = `/image/compressed/${res.filename}`;
+                document.getElementById('compressedInfo').innerText = 
+                    `Size: ${res.file_size_kb} KB | MSE: ${res.mse}`;
+            }
+        }
+    </script>
+</body>
+</html>
