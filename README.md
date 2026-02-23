@@ -1,10 +1,10 @@
 # JPEG Compression Analyzer
 An end-to-end implementation of the JPEG image compression pipeline from scratch in Python to analyze the trade-offs between image quality, file size, and reconstruction error.
 
-![Main Interface](Screenshoots/app.png)
+![Main Interface Placeholder](Screenshoots\app.png)
 
 ## Project Structure
-The project is organized into a modular architecture where core logic is separated from the web-facing components. Each Python file is kept under the 150-line limit to ensure maintainability and readability.
+The project is organized into a modular architecture where core logbic is separated from the web-facing components. Each Python file is kept under the 150-line limit to ensure maintainability and readability.
 
 ```text
 C:\Ai_Expert\L33-JPEG Compression Analyzer
@@ -113,13 +113,10 @@ MSE = np.mean((original - compressed) ** 2)
 ## User Interface
 The application features a modern, **single-page interface** built with a **dark theme** for optimal visual analysis.
 
-![Analysis Results](Screenshoots/Screenshot_2.png)
-
-### Interface Components:
 1.  **Upload Dashboard**: A drag-and-drop zone that accepts images. Upon upload, a loading indicator appears while the server computes all 10 quality levels.
-2.  **Comparison Viewer**: As seen in the screenshot above, the interface provides an interactive side-by-side display. A **quality slider** (10-100%) allows the user to switch between compressed versions instantly. The original image remains static for reference, allowing for direct visual comparison of artifacts.
-3.  **Real-time Statistics**: Below the images, the application displays the specific **File Size (KB)** and **MSE** for the currently selected quality level. This allows users to see exactly how much storage is saved and how much error is introduced at any given quality.
-4.  **Full Analytics Table**: A summary table at the bottom listing all 10 processed levels for side-by-side metric comparison, including quality percentage, file size, percentage of original size, and MSE.
+2.  **Comparison Viewer**: An interactive side-by-side display. A **quality slider** (10-100%) allows the user to switch between compressed versions instantly. The original image remains static for reference.
+3.  **Real-time Statistics**: Below the images, the application displays the specific **File Size (KB)** and **MSE** for the currently selected quality level.
+4.  **Full Analytics Table**: A summary table at the bottom listing all 10 processed levels for side-by-side metric comparison.
 
 ## Results Analysis
 The following table represents typical results obtained during a test run with a standard 512x512 RGB test image (Original size: ~768 KB).
@@ -137,18 +134,8 @@ The following table represents typical results obtained during a test run with a
 | 90%       | 280.45         | 36.52%        | 3.41   |
 | 100%      | 512.10         | 66.68%        | 0.85   |
 
-## Visual Comparison
-The following comparison illustrates the progressive degradation of image quality as the compression factor increases. Note the emergence of "blocking" artifacts at lower quality levels due to the zeroing of high-frequency DCT coefficients.
-
-| Original (Lossless) | Quality: 90% | Quality: 50% | Quality: 10% |
-|:---:|:---:|:---:|:---:|
-| ![Original](https://placehold.co/300x300/2b2b2b/ffffff?text=Original+PNG) | ![90%](https://placehold.co/300x300/2b2b2b/03dac6?text=Quality+90%) | ![50%](https://placehold.co/300x300/2b2b2b/ffb74d?text=Quality+50%) | ![10%](https://placehold.co/300x300/2b2b2b/cf6679?text=Quality+10%) |
-| **MSE: 0.00** | **MSE: ~3.41** | **MSE: ~31.05** | **MSE: ~152.41** |
-| *Reference* | *Near-Transparent* | *Minor Artifacts* | *Heavy Blocking* |
-
 ## Conclusion
-The analysis demonstrates that JPEG compression efficiency follows a **non-linear relationship**.
- At quality levels between **70% and 90%**, there is a significant reduction in file size (60-80% savings) with negligible increases in **MSE**, making this the "sweet spot" for most web applications. Conversely, dropping below **30% quality** causes the MSE to spike exponentially as the quantization process begins to zero out essential low-frequency components, leading to visible **blocking artifacts**.
+The analysis demonstrates that JPEG compression efficiency follows a **non-linear relationship**. At quality levels between **70% and 90%**, there is a significant reduction in file size (60-80% savings) with negligible increases in **MSE**, making this the "sweet spot" for most web applications. Conversely, dropping below **30% quality** causes the MSE to spike exponentially as the quantization process begins to zero out essential low-frequency components, leading to visible **blocking artifacts**.
 
 ## How to Run
 
